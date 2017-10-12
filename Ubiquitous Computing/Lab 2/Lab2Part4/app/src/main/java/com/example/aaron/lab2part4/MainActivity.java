@@ -18,9 +18,10 @@ public class MainActivity extends AppCompatActivity {
     EditText listName;
     EditText listBox;
     TextView bannerText;
-    Button create, retrieve, clear, save;
+    Button create, retrieve, clear, save, delete;
     SQLiteDatabase db;
     Cursor c;
+
 
     String currentList;
     String listContents;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         retrieve = (Button)findViewById(R.id.retrieveButton);
         clear = (Button)findViewById(R.id.clearButton);
         save = (Button)findViewById(R.id.saveButton);
+        delete = (Button)findViewById(R.id.deleteButton);
         bannerText = (TextView) findViewById(R.id.textView);
 
         db=openOrCreateDatabase("ListDB", Context.MODE_PRIVATE, null);
@@ -151,6 +153,31 @@ public class MainActivity extends AppCompatActivity {
                             " SET listcontent = '"+  listContents + "' " +
                             "WHERE listname= '" + currentList + "';");
                     bannerText.setText("Your changes have been saved");
+                }
+            }
+        });
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentList = listName.getText().toString();
+                listContents = listBox.getText().toString();
+
+                c = db.rawQuery("SELECT * FROM list WHERE listname= '"+ currentList + "'", null);
+
+                if(currentList.equals("")){
+                    dialogAlert("Please select a list to delete");
+                }
+                else if(c.getCount() == 0){
+                    dialogAlert("You can not delete to a list you have not created");
+                }
+                else{
+                    db.execSQL("DELETE FROM list" +
+                            " WHERE listname= '" + currentList + "';");
+
+                    listBox.setText("");
+                    listName.setText("");
+                    bannerText.setText(currentList +" has been deleted");
                 }
             }
         });
