@@ -62,11 +62,13 @@ public class Pole extends Applet implements Runnable {
     	
         String str;
         int fps = 20;
-
+        setFocusable(true);
+        requestFocusInWindow();
+        
         // Initialize pole state.
         pos = 0.;
         posDot = 0.;
-        angle = 0.1; // Pole starts off at an angle 
+        angle = 0.01; // Pole starts off at an angle 
         angleDot = 0.;
         action = 0;
 
@@ -240,8 +242,6 @@ public class Pole extends Applet implements Runnable {
         if(action == Double.NaN){
         	throw new Error("Not a number error");
         }
-
-
         //Last thing: Paint the image onto the screen.
         g.drawImage(offImage, 0, 0, this);
 
@@ -266,7 +266,7 @@ public class Pole extends Applet implements Runnable {
     public void resetPole() {
         pos = 0.;
         posDot = 0.;
-        angle = 0.;
+        angle = 0.02;
         angleDot = 0.;
     }
 
